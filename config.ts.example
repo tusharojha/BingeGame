@@ -1,0 +1,11 @@
+type response = {
+    baseURL: String,
+    tokenRoute: String,
+}
+
+const config: response = {
+    baseURL: "<SERVER_BASE_URL>",
+    tokenRoute: "<TOKENS_ROUTE>",
+}
+
+export default config;

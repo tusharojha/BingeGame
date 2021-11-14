@@ -4,7 +4,7 @@ import { FlatList } from "react-native-gesture-handler"
 import { useSelector, useDispatch } from "react-redux"
 
 import commons from "../commons"
-import { signupPageAvatarUpdate } from "../redux/actions/SignupScreenActions"
+import { signupPageAvatarUpdate, signupPageSubmit, signupPageUsernameUpdate } from "../redux/actions/SignupScreenActions"
 import { ApplicationState } from "../redux/reducers/reducers"
 
 const windowWidth = Dimensions.get("window").width;
@@ -16,7 +16,7 @@ export type Props = {
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
 
     const dispatch = useDispatch()
-    const { avatar } = useSelector((state: ApplicationState) => state.SignupScreenReducer)
+    const { avatar, username, status, error } = useSelector((state: ApplicationState) => state.SignupScreenReducer)
 
     // List of available avatar images
     const avatars = [require('../assets/avatars/1.png'),
@@ -25,6 +25,10 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
     require('../assets/avatars/4.png'),
     require('../assets/avatars/5.png'),
     require('../assets/avatars/6.png')];
+
+    if (status) {
+        navigation.navigate("SplashScreen")
+    }
 
     return <SafeAreaView style={styles.container}>
         <View >
@@ -56,12 +60,15 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
         <View style={{ flex: 1, marginTop: 30 }}>
             <View style={styles.nameContainer}>
                 <Text style={[styles.text, { marginTop: 2 }]}> USERNAME </Text>
-                <TextInput style={styles.input} autoCorrect={false} spellCheck={false} maxLength={10} placeholder="What's your gaming name?" />
+                <TextInput value={username} onChangeText={(v) => dispatch(signupPageUsernameUpdate(v))} style={styles.input} autoCorrect={false} spellCheck={false} maxLength={10} placeholder="What's your gaming name?" />
             </View>
         </View>
+        <Text style={{ color: "red" }} >{` ${error} `}</Text>
         <View style={{ margin: 20 }}>
-            <TouchableNativeFeedback onPress={() => navigation.navigate("SplashScreen")}>
-                <Text style={styles.text}>Register</Text>
+            <TouchableNativeFeedback onPress={() => dispatch(signupPageSubmit(username, avatar))}>
+                <View style={styles.button}>
+                    <Text style={[styles.text, { color: "#fff" }]}>Register</Text>
+                </View>
             </TouchableNativeFeedback>
         </View>
     </SafeAreaView>
@@ -91,7 +98,7 @@ const styles = StyleSheet.create({
     },
     avatarsContainer: {
         marginTop: 30,
-        flex: 1,
+        flex: 2,
     },
     avatar: {
         height: windowWidth / 4,
@@ -119,6 +126,12 @@ const styles = StyleSheet.create({
         borderColor: commons.accentColor,
         borderBottomWidth: 2,
         padding: 3,
+    },
+    button: {
+        backgroundColor: commons.accentColor,
+        paddingHorizontal: 30,
+        paddingVertical: 10,
+        borderRadius: 30,
     }
 })
 
