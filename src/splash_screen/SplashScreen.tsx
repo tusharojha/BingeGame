@@ -1,6 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import axios from "axios"
 import React, { useEffect } from "react"
 import { View, StyleSheet, Image } from "react-native"
+import { useDispatch, useSelector } from "react-redux"
+import config from "../../config"
+import { splashScreenGetUserInfo } from "../redux/actions/SplashScreenActions"
+import { ApplicationState } from "../redux/reducers/reducers"
 
 
 export type Props = {
@@ -9,17 +14,18 @@ export type Props = {
 
 const SplashScreen: React.FC<Props> = ({ navigation }) => {
 
+    const { redirect, error } = useSelector((state: ApplicationState) => state.SplashScreenReducer)
+    const dispatch = useDispatch()
+
     useEffect(() => {
-        setTimeout(() => {
-            AsyncStorage.getItem("user").then(user => {
-                if (user == null) {
-                    navigation.replace("SignupScreen")
-                } else {
-                    navigation.replace("HomeScreen")
-                }
-            });
-        }, 2000)
+        dispatch(splashScreenGetUserInfo())
     }, [])
+
+    if (redirect !== '') {
+        setTimeout(() => {
+            navigation.replace(redirect);
+        }, 1000)
+    }
 
     return <View style={styles.container}>
         <View >
