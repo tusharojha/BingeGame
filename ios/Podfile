@@ -12,6 +12,7 @@ target 'BingeApp' do
     :hermes_enabled => false
   )
 
+
   target 'BingeAppTests' do
     inherit! :complete
     # Pods for testing
