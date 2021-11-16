@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { View, StyleSheet, Image, Text, SafeAreaView, Dimensions, TouchableNativeFeedback } from "react-native"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { homescreenConnectSockets, homescreenCreateGame } from "../redux/actions/HomeScreenActions"
 
 import { User } from "../redux/models/user"
 import { ApplicationState } from "../redux/reducers/reducers"
@@ -13,8 +14,13 @@ export type Props = {
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
+    const dispatch = useDispatch()
     const user: User = useSelector((state: ApplicationState) => state.SplashScreenReducer.user);
+    const state = useSelector((state: ApplicationState) => state.HomeScreenReducer);
 
+    useEffect(() => {
+        dispatch(homescreenConnectSockets())
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -34,7 +40,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 resizeMode: 'contain', width: 300, height: 300, flex: 1,
             }} />
             <View style={styles.buttonContainer}>
-                <TouchableNativeFeedback onPress={() => navigation.navigate('SplashScreen')}>
+                <TouchableNativeFeedback onPress={() => dispatch(homescreenCreateGame(user.token))}>
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>Create Game</Text>
                     </View>
