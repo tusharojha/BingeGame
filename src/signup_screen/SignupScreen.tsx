@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View, TextInput, StyleSheet, SafeAreaView, Image, Dimensions, Text, TouchableNativeFeedback } from "react-native"
+import { KeyboardAvoidingView, View, TextInput, StyleSheet, SafeAreaView, Image, Dimensions, Text, TouchableNativeFeedback } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 import { useSelector, useDispatch } from "react-redux"
 
@@ -30,48 +30,51 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
         navigation.navigate("SplashScreen")
     }
 
-    return <SafeAreaView style={styles.container}>
-        <View >
-            <Image source={require("../assets/images/welcome_title.png")} style={styles.logoContainer} />
-        </View>
-        <View style={styles.heading}>
-            <Text style={styles.text}>
-                SELECT YOUR
-            </Text>
-            <Text style={{ ...styles.highlight, ...styles.text }}>
-                ALTER EGO
-            </Text>
-        </View>
-
-        <View style={styles.avatarsContainer}>
-            <FlatList
-                data={avatars}
-                renderItem={(item) => {
-                    return <TouchableNativeFeedback onPress={() => dispatch(signupPageAvatarUpdate(item.index))}>
-                        <View style={avatar == item.index ? { ...styles.avatarTile, ...styles.avatarBorder } : styles.avatarTile}>
-                            <Image source={item.item} style={styles.avatar} />
-                        </View>
-                    </TouchableNativeFeedback>
-                }}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={3}
-            />
-        </View>
-        <View style={{ flex: 1, marginTop: 30 }}>
-            <View style={styles.nameContainer}>
-                <Text style={[styles.text, { marginTop: 2 }]}> USERNAME </Text>
-                <TextInput value={username} onChangeText={(v) => dispatch(signupPageUsernameUpdate(v))} style={styles.input} autoCorrect={false} spellCheck={false} maxLength={10} placeholder="What's your gaming name?" />
+    return <KeyboardAvoidingView
+        behavior="position" style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <View >
+                <Image source={require("../assets/images/welcome_title.png")} style={styles.logoContainer} />
             </View>
-        </View>
-        <Text style={{ color: "red" }} >{` ${error} `}</Text>
-        <View style={{ margin: 20 }}>
-            <TouchableNativeFeedback onPress={() => dispatch(signupPageSubmit(username, avatar))}>
-                <View style={styles.button}>
-                    <Text style={[styles.text, { color: "#fff" }]}>Register</Text>
+            <View style={styles.heading}>
+                <Text style={styles.text}>
+                    SELECT YOUR
+                </Text>
+                <Text style={{ ...styles.highlight, ...styles.text }}>
+                    ALTER EGO
+                </Text>
+            </View>
+
+            <View style={styles.avatarsContainer}>
+                <FlatList
+                    data={avatars}
+                    renderItem={(item) => {
+                        return <TouchableNativeFeedback onPress={() => dispatch(signupPageAvatarUpdate(item.index))}>
+                            <View style={avatar == item.index ? { ...styles.avatarTile, ...styles.avatarBorder } : styles.avatarTile}>
+                                <Image source={item.item} style={styles.avatar} />
+                            </View>
+                        </TouchableNativeFeedback>
+                    }}
+                    keyExtractor={(item, index) => index.toString()}
+                    numColumns={3}
+                />
+            </View>
+            <View style={{ flex: 1, marginTop: 30 }}>
+                <View style={styles.nameContainer}>
+                    <Text style={[styles.text, { marginTop: 2 }]}> USERNAME </Text>
+                    <TextInput value={username} onChangeText={(v) => dispatch(signupPageUsernameUpdate(v))} style={styles.input} autoCorrect={false} spellCheck={false} maxLength={10} placeholder="What's your gaming name?" />
                 </View>
-            </TouchableNativeFeedback>
-        </View>
-    </SafeAreaView>
+            </View>
+            <Text style={{ color: "red" }} >{` ${error} `}</Text>
+            <View style={{ margin: 20 }}>
+                <TouchableNativeFeedback onPress={() => dispatch(signupPageSubmit(username, avatar))}>
+                    <View style={styles.button}>
+                        <Text style={[styles.text, { color: "#fff" }]}>Register</Text>
+                    </View>
+                </TouchableNativeFeedback>
+            </View>
+        </SafeAreaView>
+    </KeyboardAvoidingView>
 }
 
 const styles = StyleSheet.create({

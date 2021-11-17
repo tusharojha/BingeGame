@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { View, StyleSheet, Image, Text, SafeAreaView, Dimensions, TouchableNativeFeedback } from "react-native"
+import { Alert, View, StyleSheet, Image, Text, SafeAreaView, Dimensions, TouchableNativeFeedback } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import { homescreenConnectSockets, homescreenCreateGame } from "../redux/actions/HomeScreenActions"
 
@@ -21,6 +21,28 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     useEffect(() => {
         dispatch(homescreenConnectSockets())
     }, [])
+
+    if (state.error) {
+        Alert.alert(
+            "Error",
+            state.error,
+            [
+                { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+        )
+
+        if (state.error === "Disconnected from server.") {
+            setTimeout(() => {
+                // navigation.navigate("SplashScreen")
+            }, 1000)
+        }
+    }
+
+    if (state.gameCode !== undefined) {
+        setTimeout(() => {
+            navigation.replace("LobbyScreen")
+        }, 1000)
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -45,7 +67,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                         <Text style={styles.buttonText}>Create Game</Text>
                     </View>
                 </TouchableNativeFeedback>
-                <TouchableNativeFeedback onPress={() => navigation.navigate('SplashScreen')}>
+                <TouchableNativeFeedback onPress={() => { navigation.replace('JoinGameScreen') }}>
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>Join Game</Text>
                     </View>

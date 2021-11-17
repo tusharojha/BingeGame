@@ -18,7 +18,9 @@ import { rootReducer } from "./redux/reducers/reducers";
 import HomeScreen from './home_screen/HomeScreen';
 import SignupScreen from './signup_screen/SignupScreen';
 import SplashScreen from './splash_screen/SplashScreen';
+import LobbyScreen from './lobby_screen/LobbyScreen';
 import { Provider } from 'react-redux';
+import JoinGameScreen from './home_screen/JoinGameScreen';
 
 const Stack = createStackNavigator();
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
@@ -39,6 +41,12 @@ const App = () => {
           <Stack.Screen
             name="HomeScreen"
             component={HomeScreen} />
+          <Stack.Screen
+            name="LobbyScreen"
+            component={LobbyScreen} />
+          <Stack.Screen
+            name="JoinGameScreen"
+            component={JoinGameScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
